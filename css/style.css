@@ -580,7 +580,6 @@ body.lock {
 .work {
   background-color: #141414;
   padding-top: 80px;
-  height: 100%;
 }
 
 .work__slider {
@@ -1450,14 +1449,6 @@ button.swiper-pagination-bullet {
   transition: all 0.3s ease 0s;
 }
 
-.form__input input:focus {
-  border: 1px solid #FFA300;
-  -webkit-box-shadow: 0 11px 13px 0 rgba(20, 20, 20, 0.13);
-          box-shadow: 0 11px 13px 0 rgba(20, 20, 20, 0.13);
-  opacity: 1;
-  caret-color: #ffa300;
-}
-
 .form__input button[type="reset"] {
   position: absolute;
   top: 19px;
@@ -1479,6 +1470,20 @@ button.swiper-pagination-bullet {
   background-color: #141414;
   outline: none;
   opacity: 0.4;
+}
+
+.form__email:focus {
+  border: 1px solid #FFA300;
+  -webkit-box-shadow: 0 11px 13px 0 rgba(20, 20, 20, 0.13);
+          box-shadow: 0 11px 13px 0 rgba(20, 20, 20, 0.13);
+  opacity: 1;
+  caret-color: #ffa300;
+}
+
+.form__email._error {
+  border: 1px solid #f00;
+  -webkit-box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+          box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
 .form__btn {
@@ -1670,9 +1675,6 @@ button.swiper-pagination-bullet {
   right: 0;
   z-index: 2051;
   line-height: 22px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -1698,12 +1700,14 @@ button.swiper-pagination-bullet {
   text-decoration: underline;
 }
 
-.d-none {
+.cookie-overlay.d-none {
   display: none;
 }
 
-.d-block {
-  display: block;
+.cookie-overlay.d-block {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .add-page__container {

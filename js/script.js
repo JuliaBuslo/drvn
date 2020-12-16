@@ -1,4 +1,21 @@
 "use strict";
+// cookie policy
+$(document).on('ready', function () {
+  if (document.cookie.indexOf("accepted_cookies=") < 0) {
+    $('.cookie-overlay').removeClass('d-none').addClass('d-block');
+  }
+
+  $('.accept-cookies').on('click', function () {
+    document.cookie = "accepted_cookies=yes;"
+    $('.cookie-overlay').removeClass('d-block').addClass('d-none');
+  });
+
+  // expand depending on your needs
+  // $('.close-cookies').on('click', function () {
+  //   $('.cookie-overlay').removeClass('d-block').addClass('d-none');
+  // })
+});
+
 
 // burger menu
 let menuBurger = document.querySelector('.burger');
@@ -58,37 +75,112 @@ $(window).scroll(function () {
   })
 });
 
+// --------------------------------------------------------
+// !!!form!!!
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('form');
+  form.addEventListener('submit', formSent);
 
-// form empty check
-let input = document.querySelector('.form__email_demo');
-let button = document.querySelector('.form__reset_demo');
-let inputv = input.value;
+  async function formSent(e) {
+    e.preventDefault();
 
-if (inputv.length == 0) {
-  button.style.display = 'none';
-}
-input.oninput = function () {
-  button.style.display = 'flex';
-};
+    let error = formValidate(form);
+
+    let formData = new FormData(form);
+
+
+    if (error === 0) {
+      let response = await fetch('sendmail.php', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        let result = await response.json();
+        alert(result.message);
+        form.reset();
+      } else {
+        alert('Error!');
+      }
+    } else {
+      // alert('Fill an empty field');
+    }
+  }
+
+  function formValidate(form) {
+    let error = 0;
+    let formReq = document.querySelectorAll('._req');
+
+    for (let index = 0; index < formReq.length; index++) {
+      const input = formReq[index];
+      formRemoveError(input);
+
+      if (input.classList.contains('_email')) {
+        if (emailTest(input)) {
+          formAddError(input);
+          error++;
+        }
+      } else {
+        if (input.value === '') {
+          formAddError(input);
+          error++;
+        }
+      }
+    }
+    return error;
+  }
+
+  function formAddError(input) {
+    input.parentElement.classList.add('_error');
+    input.classList.add('_error');
+  }
+  function formRemoveError(input) {
+    input.parentElement.classList.remove('_error');
+    input.classList.remove('_error');
+  }
+
+  function emailTest(input) {
+    return !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/.test(input.value);
+  }
+
+});
+
+
+
+// --------------------------------------------------------
+// email validation
+// const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+// const INPUT = document.querySelector('#email');
+// let btnDemo = document.querySelector('.form__btn');
+
+// function validateEmail(value) {
+//   return EMAIL_REGEXP.test(value);
+// }
+
+// function updateInput() {
+//   if (validateEmail(INPUT.value)) {
+//     INPUT.style.borderColor = '#ffa300';
+//   } else {
+//     INPUT.style.borderColor = 'red';
+//   }
+// }
+
+// btnDemo.addEventListener('click', updateInput);
+
+
+
+// form entry check
+let input = document.querySelector('.form__email');
+let button = document.querySelector('.form__reset');
+
 button.addEventListener('click', function () {
   button.style.display = 'none';
 })
-
-// email validation
-const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-const INPUT = document.querySelector('#email');
-let btnDemo = document.querySelector('.form__btn__demo');
-
-function validateEmail(value) {
-  return EMAIL_REGEXP.test(value);
-}
-
-function updateInput() {
-  if (validateEmail(INPUT.value)) INPUT.style.borderColor = '#ffa300';
-  else INPUT.style.borderColor = 'red';
-}
-
-btnDemo.addEventListener('click', updateInput);
+input.addEventListener('input', function () {
+  button.style.display = 'flex';
+  if (input.value == '') {
+    button.style.display = 'none';
+  }
+})
 
 
 // header adapt
@@ -139,19 +231,4 @@ $(window).on('resize scroll', function () {
   }
 });
 
-// cookie policy
-$(document).on('ready', function () {
-  if (document.cookie.indexOf("accepted_cookies=") < 0) {
-    $('.cookie-overlay').removeClass('d-none').addClass('d-block');
-  }
 
-  $('.accept-cookies').on('click', function () {
-    document.cookie = "accepted_cookies=yes;"
-    $('.cookie-overlay').removeClass('d-block').addClass('d-none');
-  })
-
-  // expand depending on your needs
-  // $('.close-cookies').on('click', function () {
-  //   $('.cookie-overlay').removeClass('d-block').addClass('d-none');
-  // })
-})
